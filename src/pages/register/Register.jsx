@@ -4,27 +4,53 @@ import { useState } from "react";
 import { IoMdEyeOff } from "react-icons/io";
 import Navbar from "../Shared/Navbar/Navbar";
 
-const Login = () => {
+const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const handleLogin = (e) => {
+  const handleRegister = (e) => {
     e.preventDefault();
-    const form = new FormData(e.currentTarget);
-    console.log(form.get("email"));
-    console.log(form.get("password"));
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+    console.log(email, password);
   };
 
   return (
     <div className="">
       <Navbar></Navbar>
-      <div className="login w-1/3 p-10 rounded mx-auto shadow bg-slate-100">
-        <h2 className="capitalize text-center mb-8 text-lg text-slate-500">
-          login your account
+      <div className="login w-1/3 px-10 py-6 rounded mx-auto shadow bg-slate-100">
+        <h2 className="capitalize text-center mb-6 text-lg text-slate-500">
+          register your account
         </h2>
 
         <hr />
 
-        <form onSubmit={handleLogin}>
-          <div className="form-control mt-6">
+        <form onSubmit={handleRegister}>
+          <div className="form-control mt-4">
+            <label className="label capitalize" htmlFor="name">
+              <span className="label-text">your name</span>
+            </label>
+            <input
+              type="text"
+              name="name"
+              id="name"
+              placeholder="Enter Your Name"
+              required
+              className="p-2 rounded-md input input-bordered"
+            />
+          </div>
+          <div className="form-control mt-4">
+            <label className="label capitalize" htmlFor="url">
+              <span className="label-text">photo URL</span>
+            </label>
+            <input
+              type="text"
+              name="url"
+              id="url"
+              placeholder="Enter Your URL"
+              required
+              className="p-2 rounded-md input input-bordered"
+            />
+          </div>
+          <div className="form-control mt-4">
             <label className="label capitalize" htmlFor="email">
               <span className="label-text">email address</span>
             </label>
@@ -37,7 +63,7 @@ const Login = () => {
               className="p-2 rounded-md input input-bordered"
             />
           </div>
-          <div className="form-control mt-5">
+          <div className="form-control mt-4">
             <label className="label capitalize" htmlFor="password">
               <span className="label-text">password</span>
             </label>
@@ -65,13 +91,13 @@ const Login = () => {
           <input
             className="mt-5 btn bg-slate-800 text-white font-bold hover:bg-stone-700 w-full"
             type="submit"
-            value="Login"
+            value="Register"
           />
         </form>
         <p className="capitalize mt-4 text-center">
-          {"don't have an account? "}
-          <Link to={"/register"} className=" font-semibold text-amber-600">
-            register
+          {"allready have and account? "}
+          <Link to={"/login"} className=" font-semibold text-amber-600">
+            login
           </Link>
         </p>
       </div>
@@ -79,4 +105,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
