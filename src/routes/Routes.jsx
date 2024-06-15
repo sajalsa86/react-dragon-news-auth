@@ -5,6 +5,9 @@ import Login from "../pages/login/Login";
 import ErrorPage from "../Components/errorPage/ErrorPage";
 import NotFound from "../Components/errorPage/NotFound";
 import Register from "../pages/register/Register";
+import PostDetails from "../pages/postDetails/PostDetails";
+import PrivateRoute from "./PrivateRoute";
+import Profile from "../pages/profile/Profile";
 
 const router = createBrowserRouter([
   {
@@ -15,6 +18,23 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Home></Home>,
+        loader: () => fetch("/public/news.json"),
+      },
+      {
+        path: "/news/:id",
+        element: (
+          <PrivateRoute>
+            <PostDetails></PostDetails>,
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/profile",
+        element: (
+          <PrivateRoute>
+            <Profile></Profile>
+          </PrivateRoute>
+        ),
       },
       {
         path: "/login",

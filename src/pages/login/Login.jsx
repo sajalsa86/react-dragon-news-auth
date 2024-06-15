@@ -1,16 +1,36 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
-import { useState } from "react";
-import { IoMdEyeOff } from "react-icons/io";
+import { useContext, useState } from "react";
+import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import Navbar from "../Shared/Navbar/Navbar";
+import { AuthContext } from "../../Providers/AuthProvider";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const { login } = useContext(AuthContext);
+
+  //find id wise post using navigate and location
+  const location = useLocation();
+  const navigate = useNavigate();
+  console.log("location in the login page", location);
+
+  //login
   const handleLogin = (e) => {
     e.preventDefault();
     const form = new FormData(e.currentTarget);
-    console.log(form.get("email"));
-    console.log(form.get("password"));
+    const email = form.get("email");
+    const password = form.get("password");
+    console.log(email, password);
+
+    login(email, password)
+      .then((result) => {
+        console.log(result.user);
+        //navigate after login
+        navigate(location?.state ? location.state : "/");
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
   };
 
   return (
@@ -54,11 +74,7 @@ const Login = () => {
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-2 top-4 text-2xl"
               >
-                {showPassword ? (
-                  <IoMdEyeOff></IoMdEyeOff>
-                ) : (
-                  <IoMdEyeOff></IoMdEyeOff>
-                )}
+                {showPassword ? <IoMdEye></IoMdEye> : <IoMdEyeOff></IoMdEyeOff>}
               </span>
             </div>
           </div>

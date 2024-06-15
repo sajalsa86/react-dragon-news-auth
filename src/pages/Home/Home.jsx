@@ -1,10 +1,15 @@
+import { useLoaderData } from "react-router-dom";
 import Header from "../Shared/Header/Header";
 import LeftSideNav from "../Shared/LeftSideNav/LeftSideNav";
 import Navbar from "../Shared/Navbar/Navbar";
 import RightSideNav from "../Shared/RightSideNav/RightSideNav";
 import BreakingNews from "./BreakingNews";
+import PostCard from "./PostCard";
 
 const Home = () => {
+  const news = useLoaderData();
+  // console.log(news);
+
   return (
     <div>
       <Header></Header>
@@ -14,8 +19,15 @@ const Home = () => {
         <div className="">
           <LeftSideNav></LeftSideNav>
         </div>
-        <div className="md:col-span-2 border">
-          <h2 className="text-4xl">News coming soon...</h2>
+        {/* post Card */}
+        <div className="md:col-span-2">
+          {news.length === 0 ? (
+            <span className="loading loading-spinner loading-md"></span>
+          ) : (
+            news.map((singleNews) => (
+              <PostCard key={singleNews._id} singleNews={singleNews}></PostCard>
+            ))
+          )}
         </div>
         <div className="">
           <RightSideNav></RightSideNav>
