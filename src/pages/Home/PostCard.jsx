@@ -66,6 +66,24 @@ const PostCard = (props) => {
 
 PostCard.propTypes = {
   singleNews: PropTypes.shape({
+    _id: PropTypes.string.isRequired, // Assuming _id is a string
+    author: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      img: PropTypes.string.isRequired,
+      published_date: PropTypes.string.isRequired,
+    }).isRequired,
+    title: PropTypes.string.isRequired,
+    image_url: PropTypes.string.isRequired,
+    details: PropTypes.string.isRequired,
+    rating: PropTypes.shape({
+      number: PropTypes.number.isRequired,
+    }).isRequired,
+    total_view: PropTypes.number.isRequired,
+  }).isRequired,
+};
+
+/* PostCard.propTypes = {
+  singleNews: PropTypes.shape({
     title: PropTypes.string.isRequired,
     author: PropTypes.string.isRequired,
     image_url: PropTypes.string.isRequired,
@@ -73,22 +91,6 @@ PostCard.propTypes = {
     rating: PropTypes.number.isRequired,
     total_view: PropTypes.number.isRequired,
     _id: PropTypes.number.isRequired,
-  }).isRequired,
-};
-/* PostCard.propTypes = {
-  singleNews: PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    author: PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      img: PropTypes.string.isRequired,
-      published_date: PropTypes.string.isRequired,
-    }).isRequired,
-    image_url: PropTypes.string.isRequired,
-    details: PropTypes.string.isRequired,
-    rating: PropTypes.shape({
-      number: PropTypes.number.isRequired,
-    }).isRequired,
-    total_view: PropTypes.number.isRequired,
   }).isRequired,
 }; */
 
