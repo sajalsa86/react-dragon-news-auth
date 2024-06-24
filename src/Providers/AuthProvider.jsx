@@ -1,14 +1,20 @@
 import { createContext, useEffect, useState } from "react";
 import PropTypes from "prop-types"; // ES6
 import {
+  GoogleAuthProvider,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
+  signInWithPopup,
   signOut,
 } from "firebase/auth";
 import auth from "../firebase/firebase.config";
 
 export const AuthContext = createContext(null);
+
+//Create an instance of the Google provider
+const googleProvider = new GoogleAuthProvider();
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -20,10 +26,20 @@ const AuthProvider = ({ children }) => {
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
-  //Sign in a user with an email address and password
+  //login
   const login = (email, password) => {
     setLoading(true);
     return signInWithEmailAndPassword(auth, email, password);
+  };
+  //login with google
+  const signInWithGoogle = () => {
+    setLoading(true);
+    return signInWithPopup(auth, googleProvider);
+  };
+  //Send a password reset email
+  const passwordResetEmail = (email) => {
+    setLoading(true);
+    return sendPasswordResetEmail(auth, email);
   };
 
   //logOut
@@ -49,6 +65,8 @@ const AuthProvider = ({ children }) => {
     loading,
     createUser,
     login,
+    signInWithGoogle,
+    passwordResetEmail,
     logOut,
   };
   return (

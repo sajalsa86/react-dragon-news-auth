@@ -1,32 +1,57 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import Navbar from "../Shared/Navbar/Navbar";
 import { AuthContext } from "../../Providers/AuthProvider";
+import validatePassword from "../../passwordValidation/PasswordValidation";
+import { sendEmailVerification, updateProfile } from "firebase/auth";
 
 const Register = () => {
+  const [registerError, setRegisterError] = useState("");
+  const [success, setSuccess] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const { createUser } = useContext(AuthContext);
-
+  //redirect in home
+  const navigate = useNavigate();
   const handleRegister = (e) => {
     e.preventDefault();
-    /*  const email = e.target.email.value;
-    const password = e.target.password.value;
-    console.log(email, password); */
     const form = new FormData(e.currentTarget);
     const name = form.get("name");
     const photo = form.get("url");
     const email = form.get("email");
     const password = form.get("password");
-    console.log(name, photo, email, password);
+    const accepted = form.get("terms");
+    console.log(name, photo, email, password, accepted);
+
+    // Password validation
+    if (!validatePassword(password, accepted, setRegisterError)) {
+      return; // Stop execution if the password is not valid
+    }
 
     //register
     createUser(email, password)
       .then((result) => {
+        //reset data
+        e.target.reset();
         console.log(result.user);
+        setSuccess("You have Successfully Registration");
+        //redirect in home
+        navigate("/");
+        //Update a user's profile
+        updateProfile(result.user, {
+          displayName: name,
+          photoURL: "https://example.com/jane-q-user/profile.jpg",
+        }).then(() => {
+          console.log("Profile Updated");
+        });
+        ////Send a user a verification email
+        sendEmailVerification(result.user).then(() => {
+          alert("Please Check your email for verifi your account ");
+        });
       })
       .catch((error) => {
         console.log(error.message);
+        setRegisterError(error.message);
       });
   };
 
@@ -101,6 +126,10 @@ const Register = () => {
               </span>
             </div>
           </div>
+          <div className="my-3">
+            <input className="mr-2" type="checkbox" name="terms" id="terms" />
+            <label htmlFor="terms">Accept Terms and Condition</label>
+          </div>
           <input
             className="mt-5 btn bg-slate-800 text-white font-bold hover:bg-stone-700 w-full"
             type="submit"
@@ -113,6 +142,15 @@ const Register = () => {
             login
           </Link>
         </p>
+
+        {registerError && (
+          <p className="text-secondary mt-2 bg-warning p-1 rounded">
+            {registerError}
+          </p>
+        )}
+        {success && (
+          <p className="text-success mt-2 bg-cyan-200 p-1 rounded">{success}</p>
+        )}
       </div>
     </div>
   );
